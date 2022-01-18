@@ -8,10 +8,11 @@ const categorySchema = mongoose.Schema({
     icon: {
         type: String,
     },
-    color: {
+    color: { 
         type: String,
     }
 })
+
 
 categorySchema.virtual('id').get(function () {
     return this._id.toHexString();

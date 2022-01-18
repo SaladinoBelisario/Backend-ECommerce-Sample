@@ -1,20 +1,23 @@
 const {Product} = require('../models/product');
 const express = require('express');
+const { Category } = require('../models/category');
 const router = express.Router();
+const mongoose = require('mongoose');
+
 
 router.get(`/`, async (req, res) =>{
     // localhost:3000/api/v1/products?categories=2342342,234234
     let filter = {};
     if(req.query.categories)
     {
-        filter = {category: req.query.categories.split(',')}
+         filter = {category: req.query.categories.split(',')}
     }
 
     const productList = await Product.find(filter).populate('category');
 
     if(!productList) {
         res.status(500).json({success: false})
-    }
+    } 
     res.send(productList);
 })
 
@@ -23,7 +26,7 @@ router.get(`/:id`, async (req, res) =>{
 
     if(!product) {
         res.status(500).json({success: false})
-    }
+    } 
     res.send(product);
 })
 
@@ -47,15 +50,15 @@ router.post(`/`, async (req, res) =>{
 
     product = await product.save();
 
-    if(!product)
-        return res.status(500).send('The product cannot be created')
+    if(!product) 
+    return res.status(500).send('The product cannot be created')
 
     res.send(product);
 })
 
 router.put('/:id',async (req, res)=> {
     if(!mongoose.isValidObjectId(req.params.id)) {
-        return res.status(400).send('Invalid Product Id')
+       return res.status(400).send('Invalid Product Id')
     }
     const category = await Category.findById(req.body.category);
     if(!category) return res.status(400).send('Invalid Category')
@@ -79,7 +82,7 @@ router.put('/:id',async (req, res)=> {
     )
 
     if(!product)
-        return res.status(500).send('the product cannot be updated!')
+    return res.status(500).send('the product cannot be updated!')
 
     res.send(product);
 })
@@ -92,7 +95,7 @@ router.delete('/:id', (req, res)=>{
             return res.status(404).json({success: false , message: "product not found!"})
         }
     }).catch(err=>{
-        return res.status(500).json({success: false, error: err})
+       return res.status(500).json({success: false, error: err}) 
     })
 })
 
@@ -101,7 +104,7 @@ router.get(`/get/count`, async (req, res) =>{
 
     if(!productCount) {
         res.status(500).json({success: false})
-    }
+    } 
     res.send({
         productCount: productCount
     });
@@ -113,7 +116,7 @@ router.get(`/get/featured/:count`, async (req, res) =>{
 
     if(!products) {
         res.status(500).json({success: false})
-    }
+    } 
     res.send(products);
 })
 
